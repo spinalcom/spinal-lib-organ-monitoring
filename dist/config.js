@@ -25,15 +25,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var config = {
     spinalConnector: {
-        protocol: process.env.SPINALHUB_PROTOCOL || 'http',
+        protocol: process.env.SPINALHUB_PROTOCOL,
         user: process.env.SPINAL_USER_ID || 168,
-        password: process.env.SPINAL_PASSWORD || "b4v4SsE2",
-        host: process.env.SPINALHUB_IP || "localhost",
-        port: process.env.SPINALHUB_PORT || 7777, // port
+        password: process.env.SPINAL_PASSWORD,
+        host: process.env.SPINALHUB_IP,
+        port: process.env.SPINALHUB_PORT, // port
     },
     file: {
         // path to a digital twin in spinalhub filesystem
-        path: process.env.SPINAL_DTWIN_PATH || "/__users__/admin/Mission/Digital twin Mission",
+        path: process.env.SPINAL_DTWIN_PATH,
     },
 };
 exports.default = config;

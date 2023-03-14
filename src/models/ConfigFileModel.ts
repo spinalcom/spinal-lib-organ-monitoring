@@ -22,14 +22,52 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import { Lst, Model, spinalCore } from "spinal-core-connectorjs";
+import { Lst, Model, spinalCore, FileSystem, Str, Val, Ptr } from "spinal-core-connectorjs";
 
+
+interface ILog extends Model {
+  timeStamp: Val,
+  message: Str
+}
+
+interface IGenericOrganData extends Model {
+  name: Str,
+  bootTimestamp: Val,
+  lastHealthTime: Val
+  ramHeapUsed: Str,
+  ipAdress: Str,
+  port: Val,
+  protocol: Str,
+  logList: Lst<ILog>
+}
+
+
+interface ISpecificOrganData extends Model {
+  state: Str,
+}
 export class ConfigFileModel extends Model {
-  constructor() {
+  genericOrganData: IGenericOrganData;
+  specificOrganData: ISpecificOrganData;
+  specificOrganConfig?: Ptr<any>
+  constructor(name: string, ipAdress: string, port: number, protocol: string) {
     super();
+    if (FileSystem._sig_server === false) return;
     this.add_attr({
-      data: {}
+      genericOrganData: {
+        name: name,
+        bootTimestamp: Date.now(),
+        lastHealthTime: Date.now(),
+        ramHeapUsed: "",
+        logList: [],
+      },
+      specificOrganData: {
+        state: "",
+        ipAdress: ipAdress,
+        port: port,
+        protocol: protocol,
+      },
     });
+    this.updateRamUsage();
   }
 
   public addToConfigFileModel(): Lst {
@@ -37,6 +75,20 @@ export class ConfigFileModel extends Model {
     this.data.add_attr(fileLst)
     return fileLst;
   }
+  public updateRamUsage() {
+    const used = process.memoryUsage();
+    this.genericOrganData.ramHeapUsed.set(`${Math.round(used.heapUsed / 1024 / 1024 * 100) / 100} MB`)
+  }
+  public loadConfigModel() {
+    if (typeof this.specificOrganConfig === "undefined") {
+      return undefined
+    } else {
+      return this.specificOrganConfig.load()
+    }
+  }
+  public setConfigModel(model: Model) {
+    this.add_attr("specificOrganConfig", new Ptr(model))
+  }
 }
-
-spinalCore.register_models(ConfigFileModel);
+// @ts-ignore
+spinalCore.register_models(ConfigFileModel, "ConfigFileModel");

@@ -22,7 +22,7 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import { Lst, spinalCore } from "spinal-core-connectorjs";
+import { Lst, spinalCore, Model } from "spinal-core-connectorjs";
 import * as path from "path";
 import { ConfigFileModel } from "../models/ConfigFileModel";
 import * as cron from 'node-cron';
@@ -40,42 +40,64 @@ export class ConfigFile {
     return this.instance;
   }
 
-  public async init(connect: spinal.FileSystem, fileName: string): Promise<ConfigFileModel> {
-    return this._loadOrMakeConfigFile(connect, fileName).then((file) => {
+  public init(connect: spinal.FileSystem, fileName: string, ipAdress: string, protocol: string, port: number): Promise<ConfigFileModel> {
+    return this._loadOrMakeConfigFile(connect, fileName, ipAdress, protocol, port).then((file) => {
       this.file = file;
-      this._scheduleReInit(file);
+      this.file.genericOrganData.bootTimestamp.set(Date.now())
+      this._scheduleReInit();
       return file;
     })
   }
 
 
-  private _loadOrMakeConfigFile(connect: spinal.FileSystem, fileName: string): Promise<ConfigFileModel> {
+  private _loadOrMakeConfigFile(connect: spinal.FileSystem, fileName: string, ipAdress: string, protocol: string, port: number): Promise<ConfigFileModel> {
     return new Promise((resolve, reject) => {
       spinalCore.load(connect, path.resolve(`/etc/Organs/${fileName}`),
         (file: ConfigFileModel) => resolve(file),
         () => connect.load_or_make_dir("/etc/Organs", (directory: spinal.Directory) => {
-          resolve(this._createFile(directory, fileName));
+          resolve(this._createFile(directory, fileName, ipAdress, protocol, port));
         })
       )
     });
   }
 
-  private _createFile(directory: spinal.Directory, fileName: string): ConfigFileModel {
-    const file = new ConfigFileModel();
+  private _createFile(directory: spinal.Directory, fileName: string, ipAdress: string, protocol: string, port: number): ConfigFileModel {
+    const file = new ConfigFileModel(fileName, ipAdress, port, protocol);
     directory.force_add_file(fileName, file, { model_type: "ConfigFile" });
     return file;
   }
 
 
-  private _scheduleReInit(file: ConfigFileModel) {
-    cron.schedule('0 /10 * * * *', () => {
-      this._reInitializeFileConfig(file);
-    })
+  private _scheduleReInit() {
+    setInterval(() => {
+      this._reInitializeFileConfig()
+    }, 60000)
   }
-  private _reInitializeFileConfig(file: ConfigFileModel) {
-    console.log("send a new data")
+  private _reInitializeFileConfig() {
+    this.file.updateRamUsage();
+    this.file.genericOrganData.lastHealthTime.set(Date.now())
+  }
+  public getConfig() {
+    return this.file.loadConfigModel();
+  };
+  public setConfig(obj: Model) {
+    return this.file.setConfigModel(obj)
   }
 
+  public bindState(callback: (state: string) => void) {
+    this.file.specificOrganData.state.bind(() => {
+      callback(this.file.specificOrganData.state.get())
+    })
+  }
+  public setState(state: string) {
+    this.file.specificOrganData.state.set(state)
+  }
+  public pushLog(message: string) {
+    this.file.genericOrganData.logList.push({
+      timeStamp: Date.now(),
+      message: message
+    })
+  }
 }
 
 export default ConfigFile.getInstance();

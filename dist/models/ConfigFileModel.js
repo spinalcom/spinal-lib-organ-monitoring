@@ -42,11 +42,26 @@ exports.ConfigFileModel = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 var ConfigFileModel = /** @class */ (function (_super) {
     __extends(ConfigFileModel, _super);
-    function ConfigFileModel() {
+    function ConfigFileModel(name, ipAdress, port, protocol) {
         var _this = _super.call(this) || this;
+        if (spinal_core_connectorjs_1.FileSystem._sig_server === false)
+            return _this;
         _this.add_attr({
-            data: {}
+            genericOrganData: {
+                name: name,
+                bootTimestamp: Date.now(),
+                lastHealthTime: Date.now(),
+                ramHeapUsed: "",
+                logList: [],
+            },
+            specificOrganData: {
+                state: "",
+                ipAdress: ipAdress,
+                port: port,
+                protocol: protocol,
+            },
         });
+        _this.updateRamUsage();
         return _this;
     }
     ConfigFileModel.prototype.addToConfigFileModel = function () {
@@ -54,8 +69,24 @@ var ConfigFileModel = /** @class */ (function (_super) {
         this.data.add_attr(fileLst);
         return fileLst;
     };
+    ConfigFileModel.prototype.updateRamUsage = function () {
+        var used = process.memoryUsage();
+        this.genericOrganData.ramHeapUsed.set("".concat(Math.round(used.heapUsed / 1024 / 1024 * 100) / 100, " MB"));
+    };
+    ConfigFileModel.prototype.loadConfigModel = function () {
+        if (typeof this.specificOrganConfig === "undefined") {
+            return undefined;
+        }
+        else {
+            return this.specificOrganConfig.load();
+        }
+    };
+    ConfigFileModel.prototype.setConfigModel = function (model) {
+        this.add_attr("specificOrganConfig", new spinal_core_connectorjs_1.Ptr(model));
+    };
     return ConfigFileModel;
 }(spinal_core_connectorjs_1.Model));
 exports.ConfigFileModel = ConfigFileModel;
-spinal_core_connectorjs_1.spinalCore.register_models(ConfigFileModel);
+// @ts-ignore
+spinal_core_connectorjs_1.spinalCore.register_models(ConfigFileModel, "ConfigFileModel");
 //# sourceMappingURL=ConfigFileModel.js.map

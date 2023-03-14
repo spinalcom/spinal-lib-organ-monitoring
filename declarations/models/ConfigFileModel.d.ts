@@ -1,5 +1,29 @@
-import { Lst, Model } from "spinal-core-connectorjs";
-export declare class ConfigFileModel extends Model {
-    constructor();
-    addToConfigFileModel(): Lst;
+import { Lst, Model, Str, Val, Ptr } from "spinal-core-connectorjs";
+interface ILog extends Model {
+    timeStamp: Val;
+    message: Str;
 }
+interface IGenericOrganData extends Model {
+    name: Str;
+    bootTimestamp: Val;
+    lastHealthTime: Val;
+    ramHeapUsed: Str;
+    ipAdress: Str;
+    port: Val;
+    protocol: Str;
+    logList: Lst<ILog>;
+}
+interface ISpecificOrganData extends Model {
+    state: Str;
+}
+export declare class ConfigFileModel extends Model {
+    genericOrganData: IGenericOrganData;
+    specificOrganData: ISpecificOrganData;
+    specificOrganConfig?: Ptr<any>;
+    constructor(name: string, ipAdress: string, port: number, protocol: string);
+    addToConfigFileModel(): Lst;
+    updateRamUsage(): void;
+    loadConfigModel(): Promise<any> | undefined;
+    setConfigModel(model: Model): void;
+}
+export {};
