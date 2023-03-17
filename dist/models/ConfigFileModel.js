@@ -59,6 +59,10 @@ var ConfigFileModel = /** @class */ (function (_super) {
                 ipAdress: ipAdress,
                 port: port,
                 protocol: protocol,
+                lastAction: {
+                    message: "connected",
+                    date: Date.now()
+                }
             },
         });
         _this.updateRamUsage();

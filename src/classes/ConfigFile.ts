@@ -40,7 +40,7 @@ export class ConfigFile {
     return this.instance;
   }
 
-  public init(connect: spinal.FileSystem, fileName: string, ipAdress: string, protocol: string, port: number): Promise<ConfigFileModel> {
+  public async init(connect: spinal.FileSystem, fileName: string, ipAdress: string, protocol: string, port: number): Promise<ConfigFileModel> {
     return this._loadOrMakeConfigFile(connect, fileName, ipAdress, protocol, port).then((file) => {
       this.file = file;
       this.file.genericOrganData.bootTimestamp.set(Date.now())
@@ -97,6 +97,10 @@ export class ConfigFile {
       timeStamp: Date.now(),
       message: message
     })
+  }
+  public pushLastAction(message: string) {
+    this.file.specificOrganData.lastAction.date.set(Date.now())
+    this.file.specificOrganData.lastAction.message.set(message)
   }
 }
 

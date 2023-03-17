@@ -8,13 +8,17 @@ interface IGenericOrganData extends Model {
     bootTimestamp: Val;
     lastHealthTime: Val;
     ramHeapUsed: Str;
-    ipAdress: Str;
-    port: Val;
-    protocol: Str;
     logList: Lst<ILog>;
 }
 interface ISpecificOrganData extends Model {
     state: Str;
+    ipAdress: Str;
+    port: Val;
+    protocol: Str;
+    lastAction: {
+        message: Str;
+        date: Val;
+    };
 }
 export declare class ConfigFileModel extends Model {
     genericOrganData: IGenericOrganData;

@@ -15,6 +15,7 @@ export declare class ConfigFile {
     bindState(callback: (state: string) => void): void;
     setState(state: string): void;
     pushLog(message: string): void;
+    pushLastAction(message: string): void;
 }
 declare const _default: ConfigFile;
 export default _default;
