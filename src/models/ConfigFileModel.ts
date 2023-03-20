@@ -53,7 +53,7 @@ export class ConfigFileModel extends Model {
   genericOrganData: IGenericOrganData;
   specificOrganData: ISpecificOrganData;
   specificOrganConfig?: Ptr<any>
-  constructor(name: string, ipAdress: string, port: number, protocol: string) {
+  constructor(name: string, ipAdress?: string, port?: number, protocol?: string) {
     super();
     if (FileSystem._sig_server === false) return;
     this.add_attr({
