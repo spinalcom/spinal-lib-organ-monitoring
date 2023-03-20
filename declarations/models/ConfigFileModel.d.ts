@@ -24,7 +24,7 @@ export declare class ConfigFileModel extends Model {
     genericOrganData: IGenericOrganData;
     specificOrganData: ISpecificOrganData;
     specificOrganConfig?: Ptr<any>;
-    constructor(name: string, ipAdress: string, port: number, protocol: string);
+    constructor(name: string, ipAdress?: string, port?: number, protocol?: string);
     addToConfigFileModel(): Lst;
     updateRamUsage(): void;
     loadConfigModel(): Promise<any> | undefined;

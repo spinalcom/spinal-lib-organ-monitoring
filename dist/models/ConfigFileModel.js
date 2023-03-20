@@ -75,7 +75,7 @@ var ConfigFileModel = /** @class */ (function (_super) {
     };
     ConfigFileModel.prototype.updateRamUsage = function () {
         var used = process.memoryUsage();
-        this.genericOrganData.ramHeapUsed.set("".concat(Math.round(used.heapUsed / 1024 / 1024 * 100) / 100, " MB"));
+        this.genericOrganData.ramHeapUsed.set(Math.round(used.heapUsed / 1024 / 1024 * 100) / 100 + " MB");
     };
     ConfigFileModel.prototype.loadConfigModel = function () {
         if (typeof this.specificOrganConfig === "undefined") {
