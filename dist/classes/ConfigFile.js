@@ -97,7 +97,6 @@ var ConfigFile = /** @class */ (function () {
                 return [2 /*return*/, this._loadOrMakeConfigFile(connect, fileName, ipAdress, protocol, port).then(function (file) {
                         _this.file = file;
                         _this.file.genericOrganData.bootTimestamp.set(Date.now());
-                        console.log("hello");
                         _this._scheduleReInit();
                         return file;
                     })];

@@ -44,8 +44,6 @@ export class ConfigFile {
     return this._loadOrMakeConfigFile(connect, fileName, ipAdress, protocol, port).then((file) => {
       this.file = file;
       this.file.genericOrganData.bootTimestamp.set(Date.now())
-      console.log("hello");
-
       this._scheduleReInit();
       return file;
     })
