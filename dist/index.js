@@ -29,6 +29,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigFileModel = exports.ConfigFile = void 0;
 var ConfigFile_1 = __importDefault(require("./classes/ConfigFile"));
 exports.ConfigFile = ConfigFile_1.default;
-var ConfigFileModel_1 = require("./models/ConfigFileModel");
-Object.defineProperty(exports, "ConfigFileModel", { enumerable: true, get: function () { return ConfigFileModel_1.ConfigFileModel; } });
+var ConfigFileModel_1 = __importDefault(require("./models/ConfigFileModel"));
+exports.ConfigFileModel = ConfigFileModel_1.default;
 //# sourceMappingURL=index.js.map

@@ -24,11 +24,10 @@
 
 import { Lst, spinalCore, Model } from "spinal-core-connectorjs";
 import * as path from "path";
-import { ConfigFileModel } from "../models/ConfigFileModel";
-import * as cron from 'node-cron';
+import ConfigFileModel from "../models/ConfigFileModel";
 
 
-export class ConfigFile {
+export default class ConfigFile {
   private static instance: ConfigFile;
   private file: ConfigFileModel;
 
@@ -103,5 +102,3 @@ export class ConfigFile {
     this.file.specificOrganData.lastAction.message.set(message)
   }
 }
-
-export default ConfigFile.getInstance();

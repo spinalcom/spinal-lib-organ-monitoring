@@ -24,7 +24,11 @@
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -56,7 +60,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -77,11 +81,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfigFile = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 var path = __importStar(require("path"));
-var ConfigFileModel_1 = require("../models/ConfigFileModel");
+var ConfigFileModel_1 = __importDefault(require("../models/ConfigFileModel"));
 var ConfigFile = /** @class */ (function () {
     function ConfigFile() {
     }
@@ -106,13 +112,13 @@ var ConfigFile = /** @class */ (function () {
     ConfigFile.prototype._loadOrMakeConfigFile = function (connect, fileName, ipAdress, protocol, port) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            spinal_core_connectorjs_1.spinalCore.load(connect, path.resolve("/etc/Organs/" + fileName), function (file) { return resolve(file); }, function () { return connect.load_or_make_dir("/etc/Organs", function (directory) {
+            spinal_core_connectorjs_1.spinalCore.load(connect, path.resolve("/etc/Organs/".concat(fileName)), function (file) { return resolve(file); }, function () { return connect.load_or_make_dir("/etc/Organs", function (directory) {
                 resolve(_this._createFile(directory, fileName, ipAdress, protocol, port));
             }); });
         });
     };
     ConfigFile.prototype._createFile = function (directory, fileName, ipAdress, protocol, port) {
-        var file = new ConfigFileModel_1.ConfigFileModel(fileName, ipAdress, port, protocol);
+        var file = new ConfigFileModel_1.default(fileName, ipAdress, port, protocol);
         directory.force_add_file(fileName, file, { model_type: "ConfigFile" });
         return file;
     };
@@ -154,6 +160,5 @@ var ConfigFile = /** @class */ (function () {
     };
     return ConfigFile;
 }());
-exports.ConfigFile = ConfigFile;
-exports.default = ConfigFile.getInstance();
+exports.default = ConfigFile;
 //# sourceMappingURL=ConfigFile.js.map

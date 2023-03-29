@@ -49,7 +49,7 @@ interface ISpecificOrganData extends Model {
     date: Val
   }
 }
-export class ConfigFileModel extends Model {
+export default class ConfigFileModel extends Model {
   genericOrganData: IGenericOrganData;
   specificOrganData: ISpecificOrganData;
   specificOrganConfig?: Ptr<any>
