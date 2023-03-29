@@ -82,7 +82,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfigFile = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 var path = __importStar(require("path"));
 var ConfigFileModel_1 = require("../models/ConfigFileModel");
@@ -158,5 +157,5 @@ var ConfigFile = /** @class */ (function () {
     };
     return ConfigFile;
 }());
-exports.ConfigFile = ConfigFile;
+exports.default = ConfigFile.getInstance();
 //# sourceMappingURL=ConfigFile.js.map

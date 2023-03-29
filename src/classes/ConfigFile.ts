@@ -102,4 +102,4 @@ class ConfigFile {
     this.file.specificOrganData.lastAction.message.set(message)
   }
 }
-export { ConfigFile } 
+export default ConfigFile.getInstance()  

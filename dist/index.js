@@ -22,8 +22,13 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var ConfigFile_1 = require("./classes/ConfigFile");
+exports.ConfigFileModel = void 0;
+var ConfigFile_1 = __importDefault(require("./classes/ConfigFile"));
 var ConfigFileModel_1 = require("./models/ConfigFileModel");
-exports.default = { ConfigFile: ConfigFile_1.ConfigFile, ConfigFileModel: ConfigFileModel_1.ConfigFileModel };
+Object.defineProperty(exports, "ConfigFileModel", { enumerable: true, get: function () { return ConfigFileModel_1.ConfigFileModel; } });
+exports.default = ConfigFile_1.default;
 //# sourceMappingURL=index.js.map

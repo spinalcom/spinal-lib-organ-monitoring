@@ -17,4 +17,5 @@ declare class ConfigFile {
     pushLog(message: string): void;
     pushLastAction(message: string): void;
 }
-export { ConfigFile };
+declare const _default: ConfigFile;
+export default _default;
