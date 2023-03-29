@@ -38,6 +38,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConfigFileModel = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 var ConfigFileModel = /** @class */ (function (_super) {
     __extends(ConfigFileModel, _super);
@@ -89,7 +90,7 @@ var ConfigFileModel = /** @class */ (function (_super) {
     };
     return ConfigFileModel;
 }(spinal_core_connectorjs_1.Model));
-exports.default = ConfigFileModel;
+exports.ConfigFileModel = ConfigFileModel;
 // @ts-ignore
 spinal_core_connectorjs_1.spinalCore.register_models(ConfigFileModel, "ConfigFileModel");
 //# sourceMappingURL=ConfigFileModel.js.map

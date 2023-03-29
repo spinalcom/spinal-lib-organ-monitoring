@@ -81,13 +81,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConfigFile = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 var path = __importStar(require("path"));
-var ConfigFileModel_1 = __importDefault(require("../models/ConfigFileModel"));
+var ConfigFileModel_1 = require("../models/ConfigFileModel");
 var ConfigFile = /** @class */ (function () {
     function ConfigFile() {
     }
@@ -118,7 +116,7 @@ var ConfigFile = /** @class */ (function () {
         });
     };
     ConfigFile.prototype._createFile = function (directory, fileName, ipAdress, protocol, port) {
-        var file = new ConfigFileModel_1.default(fileName, ipAdress, port, protocol);
+        var file = new ConfigFileModel_1.ConfigFileModel(fileName, ipAdress, port, protocol);
         directory.force_add_file(fileName, file, { model_type: "ConfigFile" });
         return file;
     };
@@ -160,5 +158,5 @@ var ConfigFile = /** @class */ (function () {
     };
     return ConfigFile;
 }());
-exports.default = ConfigFile;
+exports.ConfigFile = ConfigFile;
 //# sourceMappingURL=ConfigFile.js.map

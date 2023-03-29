@@ -1,6 +1,6 @@
 import { Model } from "spinal-core-connectorjs";
-import ConfigFileModel from "../models/ConfigFileModel";
-export default class ConfigFile {
+import { ConfigFileModel } from "../models/ConfigFileModel";
+declare class ConfigFile {
     private static instance;
     private file;
     private constructor();
@@ -17,3 +17,4 @@ export default class ConfigFile {
     pushLog(message: string): void;
     pushLastAction(message: string): void;
 }
+export { ConfigFile };
