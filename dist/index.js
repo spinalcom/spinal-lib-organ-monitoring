@@ -26,9 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ConfigFileModel = exports.ConfigFile = void 0;
 var ConfigFile_1 = __importDefault(require("./classes/ConfigFile"));
-exports.ConfigFile = ConfigFile_1.default;
 var ConfigFileModel_1 = __importDefault(require("./models/ConfigFileModel"));
-exports.ConfigFileModel = ConfigFileModel_1.default;
+exports.default = { ConfigFile: ConfigFile_1.default, ConfigFileModel: ConfigFileModel_1.default };
 //# sourceMappingURL=index.js.map
