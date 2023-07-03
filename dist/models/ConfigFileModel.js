@@ -37,9 +37,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigFileModel = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
+var generate_password_1 = __importDefault(require("generate-password"));
+var registerKey = generate_password_1.default.generate({
+    length: 20,
+    numbers: true,
+});
 var ConfigFileModel = /** @class */ (function (_super) {
     __extends(ConfigFileModel, _super);
     function ConfigFileModel(name, ipAdress, port, protocol) {
@@ -48,6 +56,7 @@ var ConfigFileModel = /** @class */ (function (_super) {
             return _this;
         _this.add_attr({
             genericOrganData: {
+                id: generate_password_1.default.generate({ length: 20, numbers: true }),
                 name: name,
                 bootTimestamp: Date.now(),
                 lastHealthTime: Date.now(),
@@ -75,7 +84,7 @@ var ConfigFileModel = /** @class */ (function (_super) {
     };
     ConfigFileModel.prototype.updateRamUsage = function () {
         var used = process.memoryUsage();
-        this.genericOrganData.ramHeapUsed.set("".concat(Math.round(used.heapUsed / 1024 / 1024 * 100) / 100, " MB"));
+        this.genericOrganData.ramHeapUsed.set(Math.round(used.heapUsed / 1024 / 1024 * 100) / 100 + " MB");
     };
     ConfigFileModel.prototype.loadConfigModel = function () {
         if (typeof this.specificOrganConfig === "undefined") {

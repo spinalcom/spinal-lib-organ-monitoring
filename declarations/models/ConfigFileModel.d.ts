@@ -4,6 +4,7 @@ interface ILog extends Model {
     message: Str;
 }
 interface IGenericOrganData extends Model {
+    id: Str;
     name: Str;
     bootTimestamp: Val;
     lastHealthTime: Val;

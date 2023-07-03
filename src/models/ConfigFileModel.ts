@@ -23,7 +23,11 @@
  */
 
 import { Lst, Model, spinalCore, FileSystem, Str, Val, Ptr } from "spinal-core-connectorjs";
-
+import generator from 'generate-password';
+var registerKey = generator.generate({
+  length: 20,
+  numbers: true,
+});
 
 interface ILog extends Model {
   timeStamp: Val,
@@ -31,6 +35,7 @@ interface ILog extends Model {
 }
 
 interface IGenericOrganData extends Model {
+  id: Str,
   name: Str,
   bootTimestamp: Val,
   lastHealthTime: Val
@@ -58,6 +63,7 @@ export class ConfigFileModel extends Model {
     if (FileSystem._sig_server === false) return;
     this.add_attr({
       genericOrganData: {
+        id: generator.generate({ length: 20, numbers: true }),
         name: name,
         bootTimestamp: Date.now(),
         lastHealthTime: Date.now(),
