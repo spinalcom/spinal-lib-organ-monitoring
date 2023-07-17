@@ -19,11 +19,11 @@
   },
   "homepage": "https://github.com/spinalcom/spinal-lib-organ-monitoring#readme",
   "dependencies": {
+    "generate-password": "^1.7.0",
     "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git"
   },
   "devDependencies": {
     "@types/node": "^20.4.2",
-    "generate-password": "^1.7.0",
     "typescript": "^4.9.5"
   },
   "types": "declarations"
