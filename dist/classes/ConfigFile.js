@@ -22,25 +22,6 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -56,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -78,8 +59,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.configFile = exports.ConfigFile = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
-var path = __importStar(require("path"));
+var path_1 = require("path");
 var ConfigFileModel_1 = require("../models/ConfigFileModel");
 var ConfigFile = /** @class */ (function () {
     function ConfigFile() {
@@ -105,14 +87,16 @@ var ConfigFile = /** @class */ (function () {
     ConfigFile.prototype._loadOrMakeConfigFile = function (connect, fileName, ipAdress, protocol, port) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            spinal_core_connectorjs_1.spinalCore.load(connect, path.resolve("/etc/Organs/" + fileName), function (file) { return resolve(file); }, function () { return connect.load_or_make_dir("/etc/Organs", function (directory) {
-                resolve(_this._createFile(directory, fileName, ipAdress, protocol, port));
-            }); });
+            spinal_core_connectorjs_1.spinalCore.load(connect, (0, path_1.resolve)("/etc/Organs/".concat(fileName)), function (file) { return resolve(file); }, function () {
+                return connect.load_or_make_dir('/etc/Organs', function (directory) {
+                    resolve(_this._createFile(directory, fileName, ipAdress, protocol, port));
+                });
+            });
         });
     };
     ConfigFile.prototype._createFile = function (directory, fileName, ipAdress, protocol, port) {
         var file = new ConfigFileModel_1.ConfigFileModel(fileName, ipAdress, port, protocol);
-        directory.force_add_file(fileName, file, { model_type: "ConfigFile" });
+        directory.force_add_file(fileName, file, { model_type: 'ConfigFile' });
         return file;
     };
     ConfigFile.prototype._scheduleReInit = function () {
@@ -128,7 +112,6 @@ var ConfigFile = /** @class */ (function () {
     ConfigFile.prototype.getConfig = function () {
         return this.file.loadConfigModel();
     };
-    ;
     ConfigFile.prototype.setConfig = function (obj) {
         return this.file.setConfigModel(obj);
     };
@@ -144,7 +127,7 @@ var ConfigFile = /** @class */ (function () {
     ConfigFile.prototype.pushLog = function (message) {
         this.file.genericOrganData.logList.push({
             timeStamp: Date.now(),
-            message: message
+            message: message,
         });
     };
     ConfigFile.prototype.pushLastAction = function (message) {
@@ -153,5 +136,7 @@ var ConfigFile = /** @class */ (function () {
     };
     return ConfigFile;
 }());
-exports.default = ConfigFile.getInstance();
+exports.ConfigFile = ConfigFile;
+exports.configFile = ConfigFile.getInstance();
+exports.default = exports.configFile;
 //# sourceMappingURL=ConfigFile.js.map

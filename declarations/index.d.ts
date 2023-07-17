@@ -1,4 +1,4 @@
-import ConfigFile from "./classes/ConfigFile";
-import { ConfigFileModel } from "./models/ConfigFileModel";
-export default ConfigFile;
-export { ConfigFileModel };
+export * from './classes/ConfigFile';
+export * from './models/ConfigFileModel';
+import { configFile } from './classes/ConfigFile';
+export default configFile;

@@ -44,10 +44,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigFileModel = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 var generate_password_1 = __importDefault(require("generate-password"));
-var registerKey = generate_password_1.default.generate({
-    length: 20,
-    numbers: true,
-});
 var ConfigFileModel = /** @class */ (function (_super) {
     __extends(ConfigFileModel, _super);
     function ConfigFileModel(name, ipAdress, port, protocol) {
@@ -60,18 +56,18 @@ var ConfigFileModel = /** @class */ (function (_super) {
                 name: name,
                 bootTimestamp: Date.now(),
                 lastHealthTime: Date.now(),
-                ramHeapUsed: "",
+                ramRssUsed: '',
                 logList: [],
             },
             specificOrganData: {
-                state: "",
+                state: '',
                 ipAdress: ipAdress,
                 port: port,
                 protocol: protocol,
                 lastAction: {
-                    message: "connected",
-                    date: Date.now()
-                }
+                    message: 'connected',
+                    date: Date.now(),
+                },
             },
         });
         _this.updateRamUsage();
@@ -84,10 +80,14 @@ var ConfigFileModel = /** @class */ (function (_super) {
     };
     ConfigFileModel.prototype.updateRamUsage = function () {
         var used = process.memoryUsage();
-        this.genericOrganData.ramHeapUsed.set(Math.round(used.heapUsed / 1024 / 1024 * 100) / 100 + " MB");
+        var value = "".concat(Math.round((used.rss / 1024 / 1024) * 100) / 100, " MB");
+        if (!this.genericOrganData.ramRssUsed)
+            this.genericOrganData.add_attr('ramRssUsed', value);
+        else
+            this.genericOrganData.ramRssUsed.set(value);
     };
     ConfigFileModel.prototype.loadConfigModel = function () {
-        if (typeof this.specificOrganConfig === "undefined") {
+        if (typeof this.specificOrganConfig === 'undefined') {
             return undefined;
         }
         else {
@@ -95,11 +95,10 @@ var ConfigFileModel = /** @class */ (function (_super) {
         }
     };
     ConfigFileModel.prototype.setConfigModel = function (model) {
-        this.add_attr("specificOrganConfig", new spinal_core_connectorjs_1.Ptr(model));
+        this.add_attr('specificOrganConfig', new spinal_core_connectorjs_1.Ptr(model));
     };
     return ConfigFileModel;
 }(spinal_core_connectorjs_1.Model));
 exports.ConfigFileModel = ConfigFileModel;
-// @ts-ignore
-spinal_core_connectorjs_1.spinalCore.register_models(ConfigFileModel, "ConfigFileModel");
+spinal_core_connectorjs_1.spinalCore.register_models(ConfigFileModel, 'ConfigFileModel');
 //# sourceMappingURL=ConfigFileModel.js.map

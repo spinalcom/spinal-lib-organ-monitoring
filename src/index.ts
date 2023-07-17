@@ -22,10 +22,8 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import ConfigFile from "./classes/ConfigFile";
-import { ConfigFileModel } from "./models/ConfigFileModel";
+export * from './classes/ConfigFile';
+export * from './models/ConfigFileModel';
+import { configFile } from './classes/ConfigFile';
 
-
-export default ConfigFile
-export { ConfigFileModel }
-
+export default configFile;

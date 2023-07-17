@@ -1,17 +1,17 @@
-import { Lst, Model, Str, Val, Ptr } from "spinal-core-connectorjs";
-interface ILog extends Model {
+import { Lst, Model, Ptr, type Str, type Val } from 'spinal-core-connectorjs';
+export interface ILog extends Model {
     timeStamp: Val;
     message: Str;
 }
-interface IGenericOrganData extends Model {
+export interface IGenericOrganData extends Model {
     id: Str;
     name: Str;
     bootTimestamp: Val;
     lastHealthTime: Val;
-    ramHeapUsed: Str;
+    ramRssUsed: Str;
     logList: Lst<ILog>;
 }
-interface ISpecificOrganData extends Model {
+export interface ISpecificOrganData extends Model {
     state: Str;
     ipAdress: Str;
     port: Val;
@@ -31,4 +31,3 @@ export declare class ConfigFileModel extends Model {
     loadConfigModel(): Promise<any> | undefined;
     setConfigModel(model: Model): void;
 }
-export {};

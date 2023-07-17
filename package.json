@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "node --enable-source-maps index.js",
     "build": "rm -fr dist && tsc",
-    "start": "tsc && node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,11 +19,11 @@
   },
   "homepage": "https://github.com/spinalcom/spinal-lib-organ-monitoring#readme",
   "dependencies": {
-    "generate-password": "^1.7.0",
-    "path": "^0.12.7",
     "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git"
   },
   "devDependencies": {
+    "@types/node": "^20.4.2",
+    "generate-password": "^1.7.0",
     "typescript": "^4.9.5"
   },
   "types": "declarations"
