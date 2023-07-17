@@ -20,6 +20,8 @@
   "homepage": "https://github.com/spinalcom/spinal-lib-organ-monitoring#readme",
   "dependencies": {
     "generate-password": "^1.7.0",
+    "getmac": "^5.20.0",
+    "ip": "^1.1.8",
     "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git"
   },
   "devDependencies": {

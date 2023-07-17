@@ -32,6 +32,11 @@ import {
   type Val,
 } from 'spinal-core-connectorjs';
 import generator from 'generate-password';
+import getMAC, { isMAC } from 'getmac';
+import os from 'os';
+var ip = require('ip');
+
+
 
 export interface ILog extends Model {
   timeStamp: Val;
@@ -43,6 +48,7 @@ export interface IGenericOrganData extends Model {
   name: Str;
   bootTimestamp: Val;
   lastHealthTime: Val;
+  macAdress: Str;
   ramRssUsed: Str;
   logList: Lst<ILog>;
 }
@@ -76,11 +82,12 @@ export class ConfigFileModel extends Model {
         bootTimestamp: Date.now(),
         lastHealthTime: Date.now(),
         ramRssUsed: '',
+        macAdress: getMAC(),
         logList: [],
       },
       specificOrganData: {
         state: '',
-        ipAdress: ipAdress,
+        ipAdress: ip.address(),
         port: port,
         protocol: protocol,
         lastAction: {
@@ -96,6 +103,9 @@ export class ConfigFileModel extends Model {
     var fileLst = new Lst();
     this.data.add_attr(fileLst);
     return fileLst;
+  }
+  public updateIPandMacAdress() {
+    console.log(getMAC())
   }
   public updateRamUsage() {
     const used = process.memoryUsage();

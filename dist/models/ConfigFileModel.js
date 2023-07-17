@@ -44,6 +44,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigFileModel = void 0;
 var spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 var generate_password_1 = __importDefault(require("generate-password"));
+var getmac_1 = __importDefault(require("getmac"));
+var ip = require('ip');
 var ConfigFileModel = /** @class */ (function (_super) {
     __extends(ConfigFileModel, _super);
     function ConfigFileModel(name, ipAdress, port, protocol) {
@@ -57,11 +59,12 @@ var ConfigFileModel = /** @class */ (function (_super) {
                 bootTimestamp: Date.now(),
                 lastHealthTime: Date.now(),
                 ramRssUsed: '',
+                macAdress: (0, getmac_1.default)(),
                 logList: [],
             },
             specificOrganData: {
                 state: '',
-                ipAdress: ipAdress,
+                ipAdress: ip.address(),
                 port: port,
                 protocol: protocol,
                 lastAction: {
@@ -77,6 +80,9 @@ var ConfigFileModel = /** @class */ (function (_super) {
         var fileLst = new spinal_core_connectorjs_1.Lst();
         this.data.add_attr(fileLst);
         return fileLst;
+    };
+    ConfigFileModel.prototype.updateIPandMacAdress = function () {
+        console.log((0, getmac_1.default)());
     };
     ConfigFileModel.prototype.updateRamUsage = function () {
         var used = process.memoryUsage();

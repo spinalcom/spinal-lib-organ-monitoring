@@ -8,6 +8,7 @@ export interface IGenericOrganData extends Model {
     name: Str;
     bootTimestamp: Val;
     lastHealthTime: Val;
+    macAdress: Str;
     ramRssUsed: Str;
     logList: Lst<ILog>;
 }
@@ -27,6 +28,7 @@ export declare class ConfigFileModel extends Model {
     specificOrganConfig?: Ptr<any>;
     constructor(name: string, ipAdress?: string, port?: number, protocol?: string);
     addToConfigFileModel(): Lst;
+    updateIPandMacAdress(): void;
     updateRamUsage(): void;
     loadConfigModel(): Promise<any> | undefined;
     setConfigModel(model: Model): void;
