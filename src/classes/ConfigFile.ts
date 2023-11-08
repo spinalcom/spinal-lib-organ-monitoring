@@ -30,7 +30,7 @@ export class ConfigFile {
   private static instance: ConfigFile;
   private file: ConfigFileModel;
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): ConfigFile {
     if (!this.instance) this.instance = new ConfigFile();
@@ -41,15 +41,15 @@ export class ConfigFile {
   public async init(
     connect: spinal.FileSystem,
     fileName: string,
-    ipAdress: string,
-    protocol: string,
-    port: number
+    type: string,
+    serverName: string,
+    port: number,
   ): Promise<ConfigFileModel> {
     return this._loadOrMakeConfigFile(
       connect,
       fileName,
-      ipAdress,
-      protocol,
+      type,
+      serverName,
       port
     ).then((file) => {
       this.file = file;
@@ -62,8 +62,8 @@ export class ConfigFile {
   private _loadOrMakeConfigFile(
     connect: spinal.FileSystem,
     fileName: string,
-    ipAdress: string,
-    protocol: string,
+    type: string,
+    serverName: string,
     port: number
   ): Promise<ConfigFileModel> {
     return new Promise((resolve, reject) => {
@@ -76,7 +76,7 @@ export class ConfigFile {
             '/etc/Organs',
             (directory: spinal.Directory) => {
               resolve(
-                this._createFile(directory, fileName, ipAdress, protocol, port)
+                this._createFile(directory, fileName, type, serverName, port)
               );
             }
           )
@@ -87,11 +87,11 @@ export class ConfigFile {
   private _createFile(
     directory: spinal.Directory,
     fileName: string,
-    ipAdress: string,
-    protocol: string,
+    type: string,
+    serverName: string,
     port: number
   ): ConfigFileModel {
-    const file = new ConfigFileModel(fileName, ipAdress, port, protocol);
+    const file = new ConfigFileModel(fileName, type, serverName, port);
     directory.force_add_file(fileName, file, { model_type: 'ConfigFile' });
     return file;
   }

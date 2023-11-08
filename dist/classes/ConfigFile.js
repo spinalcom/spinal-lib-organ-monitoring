@@ -71,11 +71,11 @@ var ConfigFile = /** @class */ (function () {
             this.instance = new ConfigFile();
         return this.instance;
     };
-    ConfigFile.prototype.init = function (connect, fileName, ipAdress, protocol, port) {
+    ConfigFile.prototype.init = function (connect, fileName, type, serverName, port) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, this._loadOrMakeConfigFile(connect, fileName, ipAdress, protocol, port).then(function (file) {
+                return [2 /*return*/, this._loadOrMakeConfigFile(connect, fileName, type, serverName, port).then(function (file) {
                         _this.file = file;
                         _this.file.genericOrganData.bootTimestamp.set(Date.now());
                         _this._scheduleReInit();
@@ -84,18 +84,18 @@ var ConfigFile = /** @class */ (function () {
             });
         });
     };
-    ConfigFile.prototype._loadOrMakeConfigFile = function (connect, fileName, ipAdress, protocol, port) {
+    ConfigFile.prototype._loadOrMakeConfigFile = function (connect, fileName, type, serverName, port) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             spinal_core_connectorjs_1.spinalCore.load(connect, (0, path_1.resolve)("/etc/Organs/".concat(fileName)), function (file) { return resolve(file); }, function () {
                 return connect.load_or_make_dir('/etc/Organs', function (directory) {
-                    resolve(_this._createFile(directory, fileName, ipAdress, protocol, port));
+                    resolve(_this._createFile(directory, fileName, type, serverName, port));
                 });
             });
         });
     };
-    ConfigFile.prototype._createFile = function (directory, fileName, ipAdress, protocol, port) {
-        var file = new ConfigFileModel_1.ConfigFileModel(fileName, ipAdress, port, protocol);
+    ConfigFile.prototype._createFile = function (directory, fileName, type, serverName, port) {
+        var file = new ConfigFileModel_1.ConfigFileModel(fileName, type, serverName, port);
         directory.force_add_file(fileName, file, { model_type: 'ConfigFile' });
         return file;
     };

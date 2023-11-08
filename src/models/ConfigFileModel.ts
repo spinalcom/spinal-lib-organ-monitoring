@@ -28,8 +28,8 @@ import {
   Lst,
   Model,
   Ptr,
-  type Str,
-  type Val,
+  Str,
+  Val,
 } from 'spinal-core-connectorjs';
 import generator from 'generate-password';
 import getMAC, { isMAC } from 'getmac';
@@ -46,18 +46,18 @@ export interface ILog extends Model {
 export interface IGenericOrganData extends Model {
   id: Str;
   name: Str;
+  type: Str,
   bootTimestamp: Val;
   lastHealthTime: Val;
   macAdress: Str;
   ramRssUsed: Str;
+  serverName: Str;
+  version: Str;
   logList: Lst<ILog>;
 }
 
 export interface ISpecificOrganData extends Model {
-  state: Str;
-  ipAdress: Str;
   port: Val;
-  protocol: Str;
   lastAction: {
     message: Str;
     date: Val;
@@ -68,10 +68,10 @@ export class ConfigFileModel extends Model {
   specificOrganData: ISpecificOrganData;
   specificOrganConfig?: Ptr<any>;
   constructor(
-    name: string,
-    ipAdress?: string,
+    name?: string,
+    type?: string,
+    serverName?: string,
     port?: number,
-    protocol?: string
   ) {
     super();
     if (FileSystem._sig_server === false) return;
@@ -79,17 +79,17 @@ export class ConfigFileModel extends Model {
       genericOrganData: {
         id: generator.generate({ length: 20, numbers: true }),
         name: name,
+        type: type,
         bootTimestamp: Date.now(),
         lastHealthTime: Date.now(),
-        ramRssUsed: '',
         macAdress: getMAC(),
+        ramRssUsed: '',
+        serverName: serverName,
+        version: '',
         logList: [],
       },
       specificOrganData: {
-        state: '',
-        ipAdress: ip.address(),
         port: port,
-        protocol: protocol,
         lastAction: {
           message: 'connected',
           date: Date.now(),
@@ -110,9 +110,7 @@ export class ConfigFileModel extends Model {
   public updateRamUsage() {
     const used = process.memoryUsage();
     const value = `${Math.round((used.rss / 1024 / 1024) * 100) / 100} MB`;
-    if (!this.genericOrganData.ramRssUsed)
-      this.genericOrganData.add_attr('ramRssUsed', value);
-    else this.genericOrganData.ramRssUsed.set(value);
+    this.genericOrganData.ramRssUsed.set(value);
   }
   public loadConfigModel() {
     if (typeof this.specificOrganConfig === 'undefined') {

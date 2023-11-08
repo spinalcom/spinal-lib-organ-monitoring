@@ -48,7 +48,7 @@ var getmac_1 = __importDefault(require("getmac"));
 var ip = require('ip');
 var ConfigFileModel = /** @class */ (function (_super) {
     __extends(ConfigFileModel, _super);
-    function ConfigFileModel(name, ipAdress, port, protocol) {
+    function ConfigFileModel(name, type, serverName, port) {
         var _this = _super.call(this) || this;
         if (spinal_core_connectorjs_1.FileSystem._sig_server === false)
             return _this;
@@ -56,17 +56,17 @@ var ConfigFileModel = /** @class */ (function (_super) {
             genericOrganData: {
                 id: generate_password_1.default.generate({ length: 20, numbers: true }),
                 name: name,
+                type: type,
                 bootTimestamp: Date.now(),
                 lastHealthTime: Date.now(),
-                ramRssUsed: '',
                 macAdress: (0, getmac_1.default)(),
+                ramRssUsed: '',
+                serverName: serverName,
+                version: '',
                 logList: [],
             },
             specificOrganData: {
-                state: '',
-                ipAdress: ip.address(),
                 port: port,
-                protocol: protocol,
                 lastAction: {
                     message: 'connected',
                     date: Date.now(),
@@ -87,10 +87,7 @@ var ConfigFileModel = /** @class */ (function (_super) {
     ConfigFileModel.prototype.updateRamUsage = function () {
         var used = process.memoryUsage();
         var value = "".concat(Math.round((used.rss / 1024 / 1024) * 100) / 100, " MB");
-        if (!this.genericOrganData.ramRssUsed)
-            this.genericOrganData.add_attr('ramRssUsed', value);
-        else
-            this.genericOrganData.ramRssUsed.set(value);
+        this.genericOrganData.ramRssUsed.set(value);
     };
     ConfigFileModel.prototype.loadConfigModel = function () {
         if (typeof this.specificOrganConfig === 'undefined') {

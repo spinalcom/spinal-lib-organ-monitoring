@@ -5,7 +5,7 @@ export declare class ConfigFile {
     private file;
     private constructor();
     static getInstance(): ConfigFile;
-    init(connect: spinal.FileSystem, fileName: string, ipAdress: string, protocol: string, port: number): Promise<ConfigFileModel>;
+    init(connect: spinal.FileSystem, fileName: string, type: string, serverName: string, port: number): Promise<ConfigFileModel>;
     private _loadOrMakeConfigFile;
     private _createFile;
     private _scheduleReInit;
