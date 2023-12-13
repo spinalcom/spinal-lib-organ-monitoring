@@ -69,11 +69,11 @@ export class ConfigFile {
     return new Promise((resolve, reject) => {
       spinalCore.load(
         connect,
-        path_resolve(`/etc/Organs/${fileName}`),
+        path_resolve(`/etc/Organs/Monitoring/${fileName}`),
         (file: ConfigFileModel) => resolve(file),
         () =>
           connect.load_or_make_dir(
-            '/etc/Organs',
+            '/etc/Organs/Monitoring',
             (directory: spinal.Directory) => {
               resolve(
                 this._createFile(directory, fileName, type, serverName, port)
