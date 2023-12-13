@@ -87,8 +87,8 @@ var ConfigFile = /** @class */ (function () {
     ConfigFile.prototype._loadOrMakeConfigFile = function (connect, fileName, type, serverName, port) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            spinal_core_connectorjs_1.spinalCore.load(connect, (0, path_1.resolve)("/etc/Organs/".concat(fileName)), function (file) { return resolve(file); }, function () {
-                return connect.load_or_make_dir('/etc/Organs', function (directory) {
+            spinal_core_connectorjs_1.spinalCore.load(connect, (0, path_1.resolve)("/etc/Organs/Monitoring/".concat(fileName)), function (file) { return resolve(file); }, function () {
+                return connect.load_or_make_dir('/etc/Organs/Monitoring', function (directory) {
                     resolve(_this._createFile(directory, fileName, type, serverName, port));
                 });
             });
