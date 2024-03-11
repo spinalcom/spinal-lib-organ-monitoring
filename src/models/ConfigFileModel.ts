@@ -110,7 +110,7 @@ export class ConfigFileModel extends Model {
   public updateRamUsage() {
     const used = process.memoryUsage();
     const value = `${Math.round((used.rss / 1024 / 1024) * 100) / 100} MB`;
-    this.genericOrganData.ramRssUsed.set(value);
+    this.genericOrganData?.ramRssUsed?.set(value);
   }
   public loadConfigModel() {
     if (typeof this.specificOrganConfig === 'undefined') {
