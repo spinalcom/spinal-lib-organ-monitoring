@@ -75,6 +75,11 @@ var ConfigFile = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
+                if (!fileName) {
+                    console.log('Monitoring file name was not provided, therefore this program will not be monitored');
+                    return [2 /*return*/];
+                }
+                ;
                 return [2 /*return*/, this._loadOrMakeConfigFile(connect, fileName, type, serverName, port).then(function (file) {
                         _this.file = file;
                         _this.file.genericOrganData.bootTimestamp.set(Date.now());

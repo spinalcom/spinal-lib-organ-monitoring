@@ -85,9 +85,10 @@ var ConfigFileModel = /** @class */ (function (_super) {
         console.log((0, getmac_1.default)());
     };
     ConfigFileModel.prototype.updateRamUsage = function () {
+        var _a, _b;
         var used = process.memoryUsage();
         var value = "".concat(Math.round((used.rss / 1024 / 1024) * 100) / 100, " MB");
-        this.genericOrganData.ramRssUsed.set(value);
+        (_b = (_a = this.genericOrganData) === null || _a === void 0 ? void 0 : _a.ramRssUsed) === null || _b === void 0 ? void 0 : _b.set(value);
     };
     ConfigFileModel.prototype.loadConfigModel = function () {
         if (typeof this.specificOrganConfig === 'undefined') {

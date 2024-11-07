@@ -44,7 +44,11 @@ export class ConfigFile {
     type: string,
     serverName: string,
     port: number,
-  ): Promise<ConfigFileModel> {
+  ): Promise<ConfigFileModel | undefined> {
+    if(!fileName) {
+      console.log('Monitoring file name was not provided, therefore this program will not be monitored');
+      return;
+    };
     return this._loadOrMakeConfigFile(
       connect,
       fileName,
