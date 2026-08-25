@@ -76,10 +76,9 @@ var ConfigFile = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 if (!fileName) {
-                    console.log('Monitoring file name was not provided, therefore this program will not be monitored');
+                    console.log("Monitoring file name was not provided, therefore this program will not be monitored");
                     return [2 /*return*/];
                 }
-                ;
                 return [2 /*return*/, this._loadOrMakeConfigFile(connect, fileName, type, serverName, port).then(function (file) {
                         _this.file = file;
                         _this.file.genericOrganData.bootTimestamp.set(Date.now());
@@ -93,7 +92,7 @@ var ConfigFile = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             spinal_core_connectorjs_1.spinalCore.load(connect, (0, path_1.resolve)("/etc/Organs/Monitoring/".concat(fileName)), function (file) { return resolve(file); }, function () {
-                return connect.load_or_make_dir('/etc/Organs/Monitoring', function (directory) {
+                return connect.load_or_make_dir("/etc/Organs/Monitoring", function (directory) {
                     resolve(_this._createFile(directory, fileName, type, serverName, port));
                 });
             });
@@ -101,13 +100,14 @@ var ConfigFile = /** @class */ (function () {
     };
     ConfigFile.prototype._createFile = function (directory, fileName, type, serverName, port) {
         var file = new ConfigFileModel_1.ConfigFileModel(fileName, type, serverName, port);
-        directory.force_add_file(fileName, file, { model_type: 'ConfigFile' });
+        directory.force_add_file(fileName, file, { model_type: "ConfigFile" });
         return file;
     };
     ConfigFile.prototype._scheduleReInit = function () {
         var _this = this;
         setInterval(function () {
             _this._reInitializeFileConfig();
+            _this._sendConfigData();
         }, 60000);
     };
     ConfigFile.prototype._reInitializeFileConfig = function () {
@@ -138,6 +138,15 @@ var ConfigFile = /** @class */ (function () {
     ConfigFile.prototype.pushLastAction = function (message) {
         this.file.specificOrganData.lastAction.date.set(Date.now());
         this.file.specificOrganData.lastAction.message.set(message);
+    };
+    ConfigFile.prototype._sendConfigData = function () {
+        var _a;
+        if (typeof process !== "undefined" && typeof process.send === "function") {
+            process.send({
+                type: "process:config_data_change",
+                data: ((_a = this.file) === null || _a === void 0 ? void 0 : _a.get()) || {},
+            });
+        }
     };
     return ConfigFile;
 }());
