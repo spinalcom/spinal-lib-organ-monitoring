@@ -43,9 +43,14 @@ export class ConfigFile {
 			console.log("Monitoring file name was not provided, therefore this program will not be monitored");
 			return;
 		}
+
 		return this._loadOrMakeConfigFile(connect, fileName, type, serverName, port).then((file) => {
 			this.file = file;
 			this.file.genericOrganData.bootTimestamp.set(Date.now());
+
+			this.setHubData(connect, this.file);
+
+			this._sendConfigData();
 			this._scheduleReInit();
 			return file;
 		});
@@ -114,12 +119,50 @@ export class ConfigFile {
 	}
 
 	private _sendConfigData() {
+		// Send the current configuration data to the parent process if available.
 		if (typeof process !== "undefined" && typeof process.send === "function") {
-			process.send({
-				type: "process:config_data_change",
-				data: this.file?.get() || {},
-			});
+			const data = { type: "process:config_data_change", data: this.file?.get() || {} };
+			process.send(data);
 		}
+	}
+
+	private setHubData(connect: spinal.FileSystem, file: ConfigFileModel) {
+		const hubData = {
+			port: connect._port,
+			url: this._formatIp(connect._url),
+			protocol: connect._protocol,
+		};
+
+		file.specificOrganData.add_attr("hubData", hubData);
+	}
+	private _formatIp(url: string): string {
+		if (this._isLocalhost(url)) {
+			url = this._getMachineIp();
+			console.log(`Localhost URL detected. Replacing with machine IP: ${url}`);
+		}
+
+		return url;
+	}
+
+	private _isLocalhost(url: string): boolean {
+		return url.includes("localhost") || url.includes("127.0.0.1");
+	}
+
+	private _getMachineIp(): string {
+		const os = require("os");
+		const networkInterfaces = os.networkInterfaces();
+		for (const interfaceName in networkInterfaces) {
+			const interfaces = networkInterfaces[interfaceName];
+			if (interfaces) {
+				for (const iface of interfaces) {
+					if (iface.family === "IPv4" && !iface.internal) {
+						return iface.address;
+					}
+				}
+			}
+		}
+
+		return "127.0.0.1";
 	}
 }
 export const configFile = ConfigFile.getInstance();

@@ -17,6 +17,10 @@ export declare class ConfigFile {
     pushLog(message: string): void;
     pushLastAction(message: string): void;
     private _sendConfigData;
+    private setHubData;
+    private _formatIp;
+    private _isLocalhost;
+    private _getMachineIp;
 }
 export declare const configFile: ConfigFile;
 export default configFile;

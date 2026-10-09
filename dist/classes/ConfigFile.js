@@ -82,6 +82,8 @@ var ConfigFile = /** @class */ (function () {
                 return [2 /*return*/, this._loadOrMakeConfigFile(connect, fileName, type, serverName, port).then(function (file) {
                         _this.file = file;
                         _this.file.genericOrganData.bootTimestamp.set(Date.now());
+                        _this.setHubData(connect, _this.file);
+                        _this._sendConfigData();
                         _this._scheduleReInit();
                         return file;
                     })];
@@ -141,12 +143,45 @@ var ConfigFile = /** @class */ (function () {
     };
     ConfigFile.prototype._sendConfigData = function () {
         var _a;
+        // Send the current configuration data to the parent process if available.
         if (typeof process !== "undefined" && typeof process.send === "function") {
-            process.send({
-                type: "process:config_data_change",
-                data: ((_a = this.file) === null || _a === void 0 ? void 0 : _a.get()) || {},
-            });
+            var data = { type: "process:config_data_change", data: ((_a = this.file) === null || _a === void 0 ? void 0 : _a.get()) || {} };
+            process.send(data);
         }
+    };
+    ConfigFile.prototype.setHubData = function (connect, file) {
+        var hubData = {
+            port: connect._port,
+            url: this._formatIp(connect._url),
+            protocol: connect._protocol,
+        };
+        file.specificOrganData.add_attr("hubData", hubData);
+    };
+    ConfigFile.prototype._formatIp = function (url) {
+        if (this._isLocalhost(url)) {
+            url = this._getMachineIp();
+            console.log("Localhost URL detected. Replacing with machine IP: ".concat(url));
+        }
+        return url;
+    };
+    ConfigFile.prototype._isLocalhost = function (url) {
+        return url.includes("localhost") || url.includes("127.0.0.1");
+    };
+    ConfigFile.prototype._getMachineIp = function () {
+        var os = require("os");
+        var networkInterfaces = os.networkInterfaces();
+        for (var interfaceName in networkInterfaces) {
+            var interfaces = networkInterfaces[interfaceName];
+            if (interfaces) {
+                for (var _i = 0, interfaces_1 = interfaces; _i < interfaces_1.length; _i++) {
+                    var iface = interfaces_1[_i];
+                    if (iface.family === "IPv4" && !iface.internal) {
+                        return iface.address;
+                    }
+                }
+            }
+        }
+        return "127.0.0.1";
     };
     return ConfigFile;
 }());
