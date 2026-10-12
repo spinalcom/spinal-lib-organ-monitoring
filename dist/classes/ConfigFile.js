@@ -157,7 +157,7 @@ var ConfigFile = /** @class */ (function () {
         };
         // Store the hub data in the environment variables for access by monitoring agents.
         if (process && process.env) {
-            process.env.configHubData = JSON.stringify(hubData);
+            process.env.spinalHubData = JSON.stringify(hubData);
         }
         file.specificOrganData.add_attr("hubData", hubData);
     };
