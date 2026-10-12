@@ -17,6 +17,7 @@ export declare class ConfigFile {
     pushLog(message: string): void;
     pushLastAction(message: string): void;
     private _sendConfigData;
+    private _listenHubDataGetter;
     private setHubData;
     private _formatIp;
     private _isLocalhost;

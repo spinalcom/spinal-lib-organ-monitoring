@@ -83,6 +83,7 @@ var ConfigFile = /** @class */ (function () {
                         _this.file = file;
                         _this.file.genericOrganData.bootTimestamp.set(Date.now());
                         _this.setHubData(connect, _this.file);
+                        _this._listenHubDataGetter();
                         _this._sendConfigData();
                         _this._scheduleReInit();
                         return file;
@@ -149,7 +150,18 @@ var ConfigFile = /** @class */ (function () {
             process.send(data);
         }
     };
+    ConfigFile.prototype._listenHubDataGetter = function () {
+        process.on("message", function (message) {
+            if ((message === null || message === void 0 ? void 0 : message.type) === "process:get_hub_data") {
+                var hubData = process.env.spinalHubData ? JSON.parse(process.env.spinalHubData) : null;
+                if (typeof process.send === "function") {
+                    process.send({ type: "process:hub_data_response", data: hubData });
+                }
+            }
+        });
+    };
     ConfigFile.prototype.setHubData = function (connect, file) {
+        var _a;
         var hubData = {
             port: connect._port,
             url: this._formatIp(connect._url),
@@ -158,6 +170,9 @@ var ConfigFile = /** @class */ (function () {
         // Store the hub data in the environment variables for access by monitoring agents.
         if (process && process.env) {
             process.env.spinalHubData = JSON.stringify(hubData);
+        }
+        if ((_a = file.specificOrganData) === null || _a === void 0 ? void 0 : _a.hubData) {
+            file.specificOrganData.hubData.set(hubData);
         }
         file.specificOrganData.add_attr("hubData", hubData);
     };

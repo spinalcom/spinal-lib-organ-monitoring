@@ -50,6 +50,8 @@ export class ConfigFile {
 
 			this.setHubData(connect, this.file);
 
+			this._listenHubDataGetter();
+
 			this._sendConfigData();
 			this._scheduleReInit();
 			return file;
@@ -125,6 +127,16 @@ export class ConfigFile {
 			process.send(data);
 		}
 	}
+	private _listenHubDataGetter() {
+		process.on("message", (message: { type?: string }) => {
+			if (message?.type === "process:get_hub_data") {
+				const hubData = process.env.spinalHubData ? JSON.parse(process.env.spinalHubData) : null;
+				if (typeof process.send === "function") {
+					process.send({ type: "process:hub_data_response", data: hubData });
+				}
+			}
+		});
+	}
 
 	private setHubData(connect: spinal.FileSystem, file: ConfigFileModel) {
 		const hubData = {
@@ -136,6 +148,10 @@ export class ConfigFile {
 		// Store the hub data in the environment variables for access by monitoring agents.
 		if (process && process.env) {
 			process.env.spinalHubData = JSON.stringify(hubData);
+		}
+
+		if (file.specificOrganData?.hubData) {
+			file.specificOrganData.hubData.set(hubData);
 		}
 
 		file.specificOrganData.add_attr("hubData", hubData);
