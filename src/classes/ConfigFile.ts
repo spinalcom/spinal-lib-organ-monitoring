@@ -125,17 +125,20 @@ export class ConfigFile {
 		if (typeof process !== "undefined" && typeof process.send === "function") {
 			const data = { type: "process:config_data_change", data: this.file?.get() || {} };
 			process.send(data);
+			this._sendHubData();
 		}
 	}
 	private _listenHubDataGetter() {
 		process.on("message", (message: { type?: string }) => {
-			if (message?.type === "process:get_hub_data") {
-				const hubData = process.env.spinalHubData ? JSON.parse(process.env.spinalHubData) : null;
-				if (typeof process.send === "function") {
-					process.send({ type: "process:hub_data_response", data: hubData });
-				}
-			}
+			if (message?.type === "process:get_hub_data") this._sendHubData();
 		});
+	}
+
+	private _sendHubData() {
+		const hubData = process.env.spinalHubData ? JSON.parse(process.env.spinalHubData) : null;
+		if (typeof process.send === "function") {
+			process.send({ type: "process:hub_data_response", data: hubData });
+		}
 	}
 
 	private setHubData(connect: spinal.FileSystem, file: ConfigFileModel) {

@@ -148,17 +148,21 @@ var ConfigFile = /** @class */ (function () {
         if (typeof process !== "undefined" && typeof process.send === "function") {
             var data = { type: "process:config_data_change", data: ((_a = this.file) === null || _a === void 0 ? void 0 : _a.get()) || {} };
             process.send(data);
+            this._sendHubData();
         }
     };
     ConfigFile.prototype._listenHubDataGetter = function () {
+        var _this = this;
         process.on("message", function (message) {
-            if ((message === null || message === void 0 ? void 0 : message.type) === "process:get_hub_data") {
-                var hubData = process.env.spinalHubData ? JSON.parse(process.env.spinalHubData) : null;
-                if (typeof process.send === "function") {
-                    process.send({ type: "process:hub_data_response", data: hubData });
-                }
-            }
+            if ((message === null || message === void 0 ? void 0 : message.type) === "process:get_hub_data")
+                _this._sendHubData();
         });
+    };
+    ConfigFile.prototype._sendHubData = function () {
+        var hubData = process.env.spinalHubData ? JSON.parse(process.env.spinalHubData) : null;
+        if (typeof process.send === "function") {
+            process.send({ type: "process:hub_data_response", data: hubData });
+        }
     };
     ConfigFile.prototype.setHubData = function (connect, file) {
         var _a;
