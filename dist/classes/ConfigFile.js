@@ -169,7 +169,7 @@ var ConfigFile = /** @class */ (function () {
         var hubData = {
             port: connect._port,
             url: this._formatIp(connect._url),
-            protocol: connect._protocol,
+            protocol: this._formatProtocol(connect._protocol),
         };
         // Store the hub data in the environment variables for access by monitoring agents.
         if (process && process.env) {
@@ -205,6 +205,12 @@ var ConfigFile = /** @class */ (function () {
             }
         }
         return "127.0.0.1";
+    };
+    ConfigFile.prototype._formatProtocol = function (protocol) {
+        if (protocol && protocol.endsWith(":")) {
+            protocol = protocol.slice(0, -1);
+        }
+        return protocol;
     };
     return ConfigFile;
 }());

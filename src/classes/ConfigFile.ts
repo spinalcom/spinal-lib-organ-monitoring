@@ -128,6 +128,7 @@ export class ConfigFile {
 			this._sendHubData();
 		}
 	}
+
 	private _listenHubDataGetter() {
 		process.on("message", (message: { type?: string }) => {
 			if (message?.type === "process:get_hub_data") this._sendHubData();
@@ -145,7 +146,7 @@ export class ConfigFile {
 		const hubData = {
 			port: connect._port,
 			url: this._formatIp(connect._url),
-			protocol: connect._protocol,
+			protocol: this._formatProtocol(connect._protocol),
 		};
 
 		// Store the hub data in the environment variables for access by monitoring agents.
@@ -188,6 +189,14 @@ export class ConfigFile {
 		}
 
 		return "127.0.0.1";
+	}
+
+	private _formatProtocol(protocol: string): string {
+		if (protocol && protocol.endsWith(":")) {
+			protocol = protocol.slice(0, -1);
+		}
+
+		return protocol;
 	}
 }
 export const configFile = ConfigFile.getInstance();

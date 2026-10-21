@@ -23,6 +23,7 @@ export declare class ConfigFile {
     private _formatIp;
     private _isLocalhost;
     private _getMachineIp;
+    private _formatProtocol;
 }
 export declare const configFile: ConfigFile;
 export default configFile;
